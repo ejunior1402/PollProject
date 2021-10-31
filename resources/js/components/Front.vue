@@ -7,27 +7,20 @@
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Actions</th>
-
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
+
+            <tr v-for="poll in polls" v-bind:key="poll.poll_id">
+                <th scope="row">{{poll.poll_id}}</th>
+                <td>{{poll.poll_description}}</td>
+                <td>
+                    <button class="btn btn-primary">View</button>
+                    <button class="btn btn-danger">Destroy</button>
+                </td>
 
             </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
 
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Larry the Bird</td>
-                <td>@twitter</td>
-            </tr>
             </tbody>
         </table>
         </div>
@@ -37,11 +30,36 @@
 <script>
 export default {
 
-
     id: 'front-page',
     name: "front-page",
+    data: function() {
+        return {
+            polls: [],
+            options: []
+        }
+    },
     mounted() {
-        console.log('Component mounted.')
+        this.loadPolls();
+        this.loadOptions();
+
+    },
+    methods:{
+        loadPolls(){
+            //load api
+            //assign this.polls
+            //catch erros
+            axios.get('/api/poll')
+            .then((response => {
+                this.polls = response.data;
+                console.log(response.data);
+            }))
+            .catch(function (error){
+                console.log(error);
+            })
+        },
+        loadOptions(){
+
+        }
     }
 }
 </script>
