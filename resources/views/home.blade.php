@@ -7,7 +7,6 @@
         <title>Laravel</title>
         <link rel="stylesheet" href="{{asset('css/app.css')}}">
 
-
         <style>
             body {
                 font-family: 'Nunito', sans-serif;
@@ -15,10 +14,19 @@
         </style>
     </head>
     <body class="antialiased">
-        <div id="app">
-            <front-page></front-page>
-        </div>
+    <div class="container">
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                Poll Project - Laravel & Vue js
+            </a>
+
+        </nav>
+            <div id="app">
+                <front-page></front-page>
+
+            </div>
     <script src="{{asset('js/app.js')}}" ></script>
+    </div>
     </body>
 </html>
 <script>

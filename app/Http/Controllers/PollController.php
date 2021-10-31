@@ -13,12 +13,12 @@ class PollController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    /*
+
     public function index()
     {
-
+        return Poll::all()->toJson();
     }
-    */
+
     /*
       {
         "views": 125, "votes": [
