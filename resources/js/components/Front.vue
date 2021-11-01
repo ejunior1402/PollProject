@@ -83,7 +83,7 @@
                                         <label>Option:</label>
                                         <input v-model="option.value"  placeholder="Type option here"/>
                                     </div>
-                                    <pre>{{$data.form}}</pre>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
