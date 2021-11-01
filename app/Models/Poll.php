@@ -17,4 +17,13 @@ class Poll extends Model
     public function options(){
         return $this->hasMany(Option::class, 'option_id', 'poll_id');
     }
+    // this is a recommended way to declare event handlers
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($poll) { // before delete() method call this
+            $poll->options()->delete();
+            // do the rest of the cleanup...
+        });
+    }
 }

@@ -28,24 +28,28 @@ class PollController extends Controller
     public function stats($id){
 
         $pool = Poll::findOrFail($id);
+        $options = Option::where('poll_id', $id)->get(['option_description', 'qty']);
 
+        $retorno = [
+            'poll_id'=>$pool->poll_id,
+            'poll_description'=> $pool->poll_description,
+            'views'=> $pool->views,
+            'votes'=>$options
+        ];
+        return json_encode($retorno);
+        /*
         return Poll::query()->with(array('options' => function($query) {
             $query->select('option_id','qty');
         }))->get(['poll_id','views'])->find($id)->toJson();
-
-
+        */
     }
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    /*
-    public function create()
-    {
 
-    }
-    */
+
     /**
      * Store a newly created resource in storage.
      *
@@ -57,13 +61,25 @@ class PollController extends Controller
         $poll = new Poll();
         $poll->poll_description = $request->poll_description;
         $poll->save();
-
         $optionsRequest = $request->options;
-        for ($i = 0;$i<count($optionsRequest); $i++){
-            $option = new Option();
-            $option->option_description = $optionsRequest[$i];
-            $option->poll_id = $poll->poll_id;
-            $option->save();
+
+        for ($i = 0;$i<count($optionsRequest); $i++) {
+            if (!isset($optionsRequest[$i]['value'])) {
+                if ($optionsRequest[$i] != null && $optionsRequest[$i] != '') {
+                    $option = new Option();
+                    $option->option_description = $optionsRequest[$i];
+                    $option->poll_id = $poll->poll_id;
+                    $option->save();
+                }
+                } else {
+                    if ($optionsRequest[$i]['value'] != null && $optionsRequest[$i]['value'] != '') {
+                        $option = new Option();
+                        $option->option_description = $optionsRequest[$i]['value'];
+                        $option->poll_id = $poll->poll_id;
+                        $option->save();
+                    }
+                }
+
         }
 
 
@@ -87,10 +103,21 @@ class PollController extends Controller
         $pool->save();
 
         //return Poll::with(['options'])->get(['poll_id','poll_description'])->find($id)->toJson();
+        $options = Option::where('poll_id', $id)->get(['option_id','option_description']);
 
+        $retorno = [
+          'poll_id'=>$pool->poll_id,
+            'poll_description'=>$pool->poll_description,
+            'options'=> $options,
+        ];
+
+        return json_encode($retorno);
+
+        /*
         return Poll::query()->with(array('options' => function($query) {
             $query->select('option_id','option_description');
         }))->get(['poll_id','poll_description'])->find($id)->toJson();
+        */
     }
 
     /**
@@ -99,12 +126,7 @@ class PollController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    /*
-    public function edit($id)
-    {
 
-    }
-*/
     /**
      * Update the specified resource in storage.
      *
@@ -125,10 +147,18 @@ class PollController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    /*
+
     public function destroy($id)
     {
+        $retorno = [];
+        if (Poll::destroy($id)){
+            $retorno = [
+              'message' => 'Pool removed',
+            ];
+        }
+
+        return json_encode($retorno);
 
     }
-    */
+
 }

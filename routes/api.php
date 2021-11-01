@@ -22,5 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('poll', PollController::class);
 
 Route::apiResource('option', OptionController::class);
-Route::post('poll/{id}/vote', [OptionController::class, 'vote']);
-Route::get('poll/{id}/stats', [PollController::class, 'stats']);
+Route::post('poll/{id}/vote', [OptionController::class, 'vote'])->name('poll.vote');
+Route::get('poll/{id}/stats', [PollController::class, 'stats'])->name('poll.stats');
