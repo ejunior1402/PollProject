@@ -19,36 +19,23 @@ class PollController extends Controller
         return Poll::all()->toJson();
     }
 
-    /*
-      {
-        "views": 125, "votes": [
-            {"option_id": 1, "qty": 10}, {"option_id": 2, "qty": 35}, {"option_id": 3, "qty": 1},
-        ] }
+    /**
+     * Display Stats of  poll
+     * @param  int  $id
      */
     public function stats($id){
 
-        $pool = Poll::findOrFail($id);
-        $options = Option::where('poll_id', $id)->get(['option_description', 'qty']);
+        $poll = Poll::findOrFail($id);
+        $options = $poll->options;
 
-        $retorno = [
-            'poll_id'=>$pool->poll_id,
-            'poll_description'=> $pool->poll_description,
-            'views'=> $pool->views,
+        $response = [
+            'poll_id'=>$poll->poll_id,
+            'poll_description'=> $poll->poll_description,
+            'views'=> $poll->views,
             'votes'=>$options
         ];
-        return json_encode($retorno);
-        /*
-        return Poll::query()->with(array('options' => function($query) {
-            $query->select('option_id','qty');
-        }))->get(['poll_id','views'])->find($id)->toJson();
-        */
+        return json_encode($response);
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
 
     /**
      * Store a newly created resource in storage.
@@ -62,7 +49,6 @@ class PollController extends Controller
         $poll->poll_description = $request->poll_description;
         $poll->save();
         $optionsRequest = $request->options;
-
         for ($i = 0;$i<count($optionsRequest); $i++) {
             if (!isset($optionsRequest[$i]['value'])) {
                 if ($optionsRequest[$i] != null && $optionsRequest[$i] != '') {
@@ -81,13 +67,8 @@ class PollController extends Controller
                 }
 
         }
-
-
-        //return json_encode($optionsRequest);
-
-
-        $retorno = ['poll_id' => $poll->poll_id];
-        return json_encode($retorno);
+        $response = ['poll_id' => $poll->poll_id];
+        return json_encode($response);
     }
 
     /**
@@ -98,48 +79,19 @@ class PollController extends Controller
      */
     public function show($id)
     {
-        $pool = Poll::findOrFail($id);
-        $pool->views = $pool->views+1;
-        $pool->save();
+        $poll = Poll::findOrFail($id);
+        $poll->views = $poll->views+1;
+        $options = $poll->options;
+        $poll->save();
 
-        //return Poll::with(['options'])->get(['poll_id','poll_description'])->find($id)->toJson();
-        $options = Option::where('poll_id', $id)->get(['option_id','option_description']);
-
-        $retorno = [
-          'poll_id'=>$pool->poll_id,
-            'poll_description'=>$pool->poll_description,
+        $response = [
+          'poll_id'=>$poll->poll_id,
+            'poll_description'=>$poll->poll_description,
             'options'=> $options,
         ];
 
-        return json_encode($retorno);
-
-        /*
-        return Poll::query()->with(array('options' => function($query) {
-            $query->select('option_id','option_description');
-        }))->get(['poll_id','poll_description'])->find($id)->toJson();
-        */
+        return json_encode($response);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*
-    public function update(Request $request, $id)
-    {
-
-    }
-    */
 
     /**
      * Remove the specified resource from storage.
@@ -150,14 +102,14 @@ class PollController extends Controller
 
     public function destroy($id)
     {
-        $retorno = [];
+        $response = [];
         if (Poll::destroy($id)){
-            $retorno = [
+            $response = [
               'message' => 'Pool removed',
             ];
         }
 
-        return json_encode($retorno);
+        return json_encode($response);
 
     }
 

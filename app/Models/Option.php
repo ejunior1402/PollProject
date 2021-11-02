@@ -12,8 +12,8 @@ class Option extends Model
     protected $fillable = [
       'option_descripton',
     ];
-
+    //Relation Map
     public function poll(){
-        return $this->belongsTo(Poll::class, 'poll_id', 'option_id');
+        return $this->belongsTo(Poll::class);
     }
 }

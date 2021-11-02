@@ -2227,7 +2227,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   id: 'front-page',
   name: "front-page",
@@ -2301,20 +2300,21 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
+    // Save a new Poll
     savepoll: function savepoll() {
       var _this5 = this;
 
-      console.log(this.form);
-      axios.post('/api/poll', this.form).then(function (res) {})["catch"](function (error) {
-        // error.response.status Check status code
+      axios.post('/api/poll', this.form).then(function (res) {
+        console.log(res);
+      })["catch"](function (error) {
         alert(error);
       })["finally"](function () {
-        //Perform action in always
         $('#dlgform').modal('hide');
 
         _this5.loadPolls();
       });
     },
+    //load modal with stats from api
     loadStats: function loadStats(id) {
       var _this6 = this;
 
@@ -2326,10 +2326,11 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
+    //add a new option (option_description) in modal create form
     addOption: function addOption() {
       this.form.options.push({
         value: ''
-      }); //$('#options').append('<br><label>Option: </label><input type="text"  name="options[]"    />');
+      });
     }
   }
 });

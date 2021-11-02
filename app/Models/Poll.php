@@ -13,9 +13,9 @@ class Poll extends Model
         'poll_description',
         'views'
     ];
-
+    //Relation map
     public function options(){
-        return $this->hasMany(Option::class, 'option_id', 'poll_id');
+        return $this->hasMany(Option::class, 'poll_id', 'poll_id');
     }
     // this is a recommended way to declare event handlers
     public static function boot() {
