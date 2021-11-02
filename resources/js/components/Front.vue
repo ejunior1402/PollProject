@@ -113,7 +113,6 @@
                             <ul v-if="Object(stats.votes).length != 0">
                                 <li v-for="option in stats.votes" >{{option.option_description}} : {{option.qty}} votes</li>
                             </ul>
-
                         </div>
                         <div class="modal-footer">
                             <button data-dismiss="modal"  type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
@@ -136,16 +135,13 @@ export default {
     data: function() {
         return {
             polls: [],
-
             poll: [],
             stats: [],
             op:[],
             form: {
                 poll_description: '',
                 options: [],
-
             }
-
         };
     },
     mounted() {
@@ -208,22 +204,20 @@ export default {
                     console.log(error);
                 })
         },
+        // Save a new Poll
         savepoll(){
-
-            console.log(this.form);
             axios.post('/api/poll', this.form)
                 .then((res) => {
-
+                    console.log(res);
                 })
                 .catch((error) => {
-                    // error.response.status Check status code
                     alert(error);
                 }).finally(() => {
-                //Perform action in always
-                $('#dlgform').modal('hide');
-                this.loadPolls();
+                    $('#dlgform').modal('hide');
+                    this.loadPolls();
             });
         },
+        //load modal with stats from api
         loadStats(id){
             axios.get('/api/poll/'+id+'/stats')
                 .then((response => {
@@ -235,9 +229,10 @@ export default {
                     console.log(error);
                 })
         },
+        //add a new option (option_description) in modal create form
         addOption(){
             this.form.options.push({value: ''});
-            //$('#options').append('<br><label>Option: </label><input type="text"  name="options[]"    />');
+
         }
 
     }
